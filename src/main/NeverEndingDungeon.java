@@ -25,8 +25,8 @@ public class NeverEndingDungeon {
 
         //***********************************Image Files****************************
 
-        File MCFile = new File("DungeonGame/src/main/MainCharacter.txt");
-        File deadFile = new File("DungeonGame/src/main/DEATH.txt");
+        File MCFile = new File("src/main/MainCharacter.txt");
+        File deadFile = new File("src/main/DEATH.txt");
 
         //********************************Instructions and Game choice**************
         System.out.println("Press space and the enter key to continue during the dialogue");
