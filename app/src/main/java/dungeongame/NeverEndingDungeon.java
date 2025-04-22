@@ -1,4 +1,4 @@
-package DungeonGame.src.main;
+package dungeongame;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,10 +7,22 @@ import java.util.Scanner;
 
 public class NeverEndingDungeon {
     public static void main(String[] args) {
+        // Don't run interactive logic if there's no console (e.g., during Gradle build/test)
+        if (System.console() == null) {
+            System.out.println("No console available. Skipping interactive game startup.");
+            return;
+        }
 
-        //************************************Background procedures***********************
         Scanner input = new Scanner(System.in);
         ArrayList<Room> roomsDone = new ArrayList<>();
+        String gameSelect = "1";
+        MainCharacter mc1 = new MainCharacter(100, 100, 20, true);
+
+        startGame(input, roomsDone, gameSelect, mc1);
+    }
+
+    public static void startGame(Scanner input, ArrayList<Room> roomsDone, String gameSelect, MainCharacter mc1){
+        //************************************Background procedures***********************
         String[] dialogue = new String[]
         {"As you walk through the first room, that uneasy feeling you felt before grows stronger \nthen suddenly...  ",
          "You make your way into the next room, it seems quiet...too quiet",
@@ -24,16 +36,14 @@ public class NeverEndingDungeon {
          };
 
         //***********************************Image Files****************************
-
-        File MCFile = new File("src/main/MainCharacter.txt");
-        File deadFile = new File("src/main/DEATH.txt");
+        File MCFile = new File("app/src/main/java/dungeongame/MainCharacter.txt");
+        File deadFile = new File("app/src/main/java/dungeongame/DEATH.txt");
 
         //********************************Instructions and Game choice**************
         System.out.println("Press space and the enter key to continue during the dialogue");
         System.out.println("Enter the number next to the action to perform that action");
         System.out.println("\n\t1-Story\n\t2-Gauntlet");
-        String gameSelect = input.next();
-
+        gameSelect = input.next();
         //**********************************Prologue Story****************************
         if (gameSelect.equals("1")) {
             System.out.println("You begun your journey into the unassuming dungeon with no clue of the dangers \nthat were hidden within.");
@@ -52,15 +62,9 @@ public class NeverEndingDungeon {
 
 
             //**********************************Character Creation******************
-            try {
-                printFile(MCFile);
-            } catch (FileNotFoundException ex) {
-                System.out.println("***NO PIC FOUND***");
-            }
-
+            printFile(MCFile);        
             System.out.println("Name: ");
             String name = input.next();
-            MainCharacter mc1 = new MainCharacter(name, 100, 100, 20, true);
             System.out.println("\n");
             System.out.println(name + "'s escape, begins now...\n");
             System.out.println("You begin making your way out of the dungeon, re-entering the very same rooms \nyou explored through earlier on in your adventure.");
@@ -99,19 +103,14 @@ public class NeverEndingDungeon {
                 }
                 // Run after Every room to check if player died
                 if (mc1.getHealthPoints() <= 0) {
-                    try {
-                        printFile(deadFile);
-                    } catch (FileNotFoundException ex) {
-                        System.out.println("***NO PIC FOUND***");
-                    }
-                    break;
+                    printFile(deadFile);         
                 } else {
                     roomsDone.add(newRoom);
                 }
 
             } while (mc1.getHealthPoints() > 0 && roomsDone.size() < 10);
             
-            if (mc1.getHealthPoints() <= 0) {
+            if (roomsDone.size() < 10) {
                 System.out.println("\n\n\tG A M E  O V E R");
                 System.out.println("\tYou cleared " + roomsDone.size() + " rooms.");
             } else {
@@ -124,7 +123,6 @@ public class NeverEndingDungeon {
             System.out.print("Let us begin, what is your name: ");
             String name = input.next();
             System.out.println("\n\n\t" + name + "\n\t\thas\n\t\tentered\n\t\t\tthe\n\t\t\t\tGAUNTLET");
-            MainCharacter mc1 = new MainCharacter(name, 100, 100, 20, true);
             int roomsCleared = 0;
             while (mc1.getHealthPoints() > 0){
                 Room repeatRoom = new Room(mc1);
@@ -142,11 +140,16 @@ public class NeverEndingDungeon {
         }
     }
 
-    public static void printFile(File picFile) throws FileNotFoundException {
-        Scanner in = new Scanner(picFile);
-        while(in.hasNextLine()){
-            System.out.println(in.nextLine());
+    public static void printFile(File picFile) {
+        try{ 
+            Scanner in = new Scanner(picFile);
+            while(in.hasNextLine()){
+                System.out.println(in.nextLine());
+            }
+            in.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("***NO PIC FOUND***");
         }
-        in.close();
+        
     }
 }

@@ -1,6 +1,5 @@
-package DungeonGame.src.main;
+package dungeongame;
 
-import DungeonGame.src.main.Character;
 
 public class MainCharacter extends Character{
     private String name = "";
@@ -18,9 +17,8 @@ public class MainCharacter extends Character{
         this.attackPower = 20;
         }
 
-    public MainCharacter(String name, int healthPoints, int staminaPoints, int attackPower, boolean isOnScreen){
+    public MainCharacter(int healthPoints, int staminaPoints, int attackPower, boolean isOnScreen){
         super(healthPoints, staminaPoints, attackPower, isOnScreen);
-        this.name = name;
         this.healthPoints = super.getHealthPoints();
         this.staminaPoints = super.getStaminaPoints();
         this.isOnScreen = super.getIsOnScreen();
@@ -68,11 +66,7 @@ public class MainCharacter extends Character{
         isBlocking = blocking;
     }
 
-    public void setEvadesuccessful(boolean evadeSuccessful){
-        this.evadeSuccessful = evadeSuccessful;
-    }
 
-    @Override
     public void setAttackPower(int attackPower) {
         this.attackPower = attackPower;
     }
@@ -81,8 +75,8 @@ public class MainCharacter extends Character{
         this.evadeSuccessful = evadeSuccessful;
     }
     public void die(){
-        if(this.healthPoints <= 0){
-            this.isOnScreen = false;
+        if(this.getHealthPoints() <= 0){
+            this.setIsOnScreen(false);
         }
     }
 
@@ -96,10 +90,10 @@ public class MainCharacter extends Character{
                 '}';
     }
     public void attack(Character character){
-        if(this.staminaPoints >= 10) {
+        if(this.getStaminaPoints() >= 10) {
             int currentHealth = character.getHealthPoints();
-            int afterAttackHealth = currentHealth - this.attackPower;
-            this.staminaPoints -= 10;
+            int afterAttackHealth = currentHealth - this.getAttackPower();
+            this.setStaminaPoints(this.getStaminaPoints() - 10);
             character.setHealthPoints(afterAttackHealth);
             System.out.println("You attacked the " + character.getName() + "!");
             System.out.println("Stamina has decreased by 10");
@@ -109,13 +103,13 @@ public class MainCharacter extends Character{
         }
     }
     public void block(Character character){
-        if(this.staminaPoints >= 5) {
+        if(this.getStaminaPoints() >= 5) {
             double blockChance = Math.random();
-            this.staminaPoints -= 5;
+            this.setStaminaPoints(this.getStaminaPoints() - 5);
             if (blockChance > .3) {
-                this.isBlocking = true;
+                this.setBlocking(true);
             } else {
-                this.isBlocking = false;
+                this.setBlocking(false);
             }
         } else {
             System.out.println("You do not have enough stamina to block.");
@@ -123,13 +117,13 @@ public class MainCharacter extends Character{
         }
     }
     public void evade(Character character){
-        if(this.staminaPoints >= 10) {
+        if(this.getStaminaPoints() >= 10) {
             double evadeChance = Math.random();
-            this.staminaPoints -= 10;
+            this.setStaminaPoints(this.getStaminaPoints() - 10);
             if (evadeChance > .7) {
-                this.evadeSuccessful = true;
+                this.setEvadeSuccessful(true);
             } else {
-                this.evadeSuccessful = false;
+            this.setEvadeSuccessful(false);
             }
         } else {
             System.out.println("You do not have enough stamina to evade.");
@@ -137,14 +131,14 @@ public class MainCharacter extends Character{
         }
     }
     public void rest() {
-        if (this.staminaPoints >= 100){
+        if (this.getStaminaPoints() >= 100){
             System.out.println("You do not need to rest");
-        } else if(this.staminaPoints <= 80) {
+        } else if(this.getStaminaPoints() <= 80) {
             System.out.println("You decide to rest up and restore your stamina.");
-            this.staminaPoints += 20;
+            this.setStaminaPoints(this.getStaminaPoints() + 20);
         } else {
             System.out.println("You decide to rest up and restore your stamina.");
-            this.staminaPoints += 5;
+            this.setStaminaPoints(this.getStaminaPoints() + 5);
         }
 
     }

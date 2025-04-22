@@ -1,4 +1,4 @@
-package DungeonGame.src.main;
+package dungeongame;
 
 public abstract class Character {
     private String name;

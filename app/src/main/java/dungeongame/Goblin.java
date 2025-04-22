@@ -1,7 +1,7 @@
-package DungeonGame.src.main;
+package dungeongame;
 
-public class Ogre extends Enemy{
-    private String name = "Ogre";
+public class Goblin extends Enemy{
+    private String name = "Goblin";
     private int attackPower;
     private int healthPoints;
     private int staminaPoints;
@@ -9,23 +9,19 @@ public class Ogre extends Enemy{
     private boolean isBlocking = false;
     private boolean evadeSuccessful = false;
 
-    public Ogre(){
-        this.healthPoints = 200;
-        this.staminaPoints = 50;
-        this.attackPower = 25;
+    public Goblin(){
+        this.healthPoints = 100;
+        this.staminaPoints = 60;
+        this.attackPower = 20;
         this.isOnScreen = true;
     }
 
-    public Ogre(int healthPoints, int staminaPoints, int attackPower, boolean isOnScreen){
+    public Goblin(int healthPoints, int staminaPoints, int attackPower, boolean isOnScreen){
         super(healthPoints, staminaPoints, attackPower, isOnScreen);
         this.healthPoints = super.getHealthPoints();
         this.staminaPoints = super.getStaminaPoints();
         this.isOnScreen = super.getIsOnScreen();
         this.attackPower = super.getAttackPower();
-    }
-
-    public String getName() {
-        return this.name;
     }
 
     public int getHealthPoints() {
@@ -47,6 +43,10 @@ public class Ogre extends Enemy{
 
     public boolean getIsBlocking(){
         return isBlocking;
+    }
+
+    public boolean isEvadeSuccessful() {
+        return evadeSuccessful;
     }
 
 
@@ -71,7 +71,7 @@ public class Ogre extends Enemy{
         return isOnScreen;
     }
     public void die(){
-        if(this.healthPoints <= 0){
+        if(this.getHealthPoints() <= 0){
             this.isOnScreen = false;
         }
     }
@@ -82,24 +82,27 @@ public class Ogre extends Enemy{
     }
 
     public void attack(Character character){
-        if(this.staminaPoints >= 10) {
+        if(this.getStaminaPoints() >= 10) {
             int currentHealth = character.getHealthPoints();
             int afterAttackHealth = currentHealth - this.attackPower;
-            this.staminaPoints -= 10;
+            this.setStaminaPoints(this.getStaminaPoints() - 10);;
             character.setHealthPoints(afterAttackHealth);
         } else {
             System.out.println("The " + this.name + " did not have enough stamina to attack.");
             rest();
         }
     }
+    public double roll(){
+        return Math.random();
+    }
     public void block(Character character){
-        if(this.staminaPoints >= 5) {
-            double blockChance = Math.random();
-            this.staminaPoints -= 5;
+        if(this.getStaminaPoints() >= 5) {
+            double blockChance = roll();
+            this.setStaminaPoints(this.getStaminaPoints() - 5);
             if (blockChance > .3) {
-                this.isBlocking = true;
+                this.setBlocking(true);
             } else {
-                this.isBlocking = false;
+                this.setBlocking(false);
             }
         } else {
             System.out.println("The " + this.name + " did not have enough stamina to block.");
@@ -107,13 +110,13 @@ public class Ogre extends Enemy{
         }
     }
     public void evade(Character character){
-        if(this.staminaPoints >= 10) {
-            double evadeChance = Math.random();
-            this.staminaPoints -= 10;
+        if(this.getStaminaPoints() >= 10) {
+            double evadeChance = roll();
+            this.setStaminaPoints(this.getStaminaPoints() - 10);
             if (evadeChance > .7) {
-                this.evadeSuccessful = true;
+                this.setEvadeSuccessful(true);
             } else {
-                this.evadeSuccessful = false;
+                this.setEvadeSuccessful(false);
             }
         } else {
             System.out.println("The " + this.name + " did not have enough stamina to evade.");
@@ -121,14 +124,14 @@ public class Ogre extends Enemy{
         }
     }
     public void rest() {
-        if (this.staminaPoints >= 60){
+        if (this.getStaminaPoints() >= 60){
             System.out.println(this.name + "tried, but did not need to rest");
-        } else if(this.staminaPoints <= 40) {
+        } else if(this.getStaminaPoints() <= 40) {
             System.out.println("The " + this.name + " decided to rest up and restore it's stamina.");
-            this.staminaPoints += 20;
+            this.setStaminaPoints(this.getStaminaPoints() + 20);
         } else {
             System.out.println("The " + this.name + " decided to rest up and restore it's stamina.");
-            this.staminaPoints += 5;
+            this.setStaminaPoints(this.getStaminaPoints() + 5);
         }
     }
 
@@ -141,8 +144,5 @@ public class Ogre extends Enemy{
                 ", isOnScreen=" + isOnScreen +
                 '}';
     }
-
-
-
 }
 

@@ -1,8 +1,7 @@
-package DungeonGame.src.main;
+package dungeongame;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 
@@ -12,9 +11,9 @@ public class Room {
     private double enemyAppearance;
 
     //***********************************Image Files****************************
-    private File goblinFile = new File("DungeonGame/src/main/Goblin.txt");
-    private File spiderFile = new File("DungeonGame/src/main/Spider.txt");
-    private File orgeFile = new File("DungeonGame/src/main/Orge.txt");
+    private File goblinFile = new File("app/src/main/java/dungeongame/Goblin.txt");
+    private File spiderFile = new File("app/src/main/java/dungeongame/Spider.txt");
+    private File orgeFile = new File("app/src/main/java/dungeongame/Orge.txt");
 
 
     public Room(){
@@ -132,6 +131,7 @@ public class Room {
             player1.die();
             System.out.println("You have died...");
         }
+        input.close();
     }
 
     public static void printFile(File picFile) throws FileNotFoundException {
@@ -139,5 +139,6 @@ public class Room {
         while(in.hasNextLine()){
             System.out.println(in.nextLine());
         }
+        in.close();
     }
 }

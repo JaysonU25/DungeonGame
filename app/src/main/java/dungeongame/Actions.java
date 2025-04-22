@@ -1,6 +1,7 @@
-package DungeonGame.src.main;
+package dungeongame;
 
-public class Actions {
+public interface Actions {
+
     public static void checkAction(String playerAction, String enemyAction, MainCharacter player,  Enemy enemy)  {
         /****************************************************************************************************
          * Checking User input
@@ -101,10 +102,10 @@ public class Actions {
                 System.out.println("You try to evade the incoming attack...");
                 if (player.isEvadeSuccessful()) {
                     System.out.println("You successfully evaded the attack!");
-                    player.setEvadesuccessful(false);
+                    player.setEvadeSuccessful(false);
                     System.out.println("\n\nCurrent Health: " + player.getHealthPoints() + " Stamina: " + player.getStaminaPoints());
 
-                } else if(!player.isEvadeSuccessful() && enemy.getStaminaPoints() >= 10){
+                } else if(!(player.isEvadeSuccessful()) && enemy.getStaminaPoints() >= 10){
                     System.out.println("You failed to evade the incoming attack!");
                     enemy.attack(player);
                     System.out.println("The " + enemy.getName() +" struck you dealing full damage!");

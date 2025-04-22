@@ -1,7 +1,8 @@
-package DungeonGame.src.main;
+package dungeongame;
 
-public class Spider extends Enemy{
-    private String name = "Spider";
+
+public abstract class Enemy extends Character{
+    private String name;
     private int attackPower;
     private int healthPoints;
     private int staminaPoints;
@@ -9,14 +10,14 @@ public class Spider extends Enemy{
     private boolean isBlocking = false;
     private boolean evadeSuccessful = false;
 
-    public Spider(){
-        this.healthPoints = 75;
+    public Enemy(){
+        this.healthPoints = 100;
         this.staminaPoints = 100;
-        this.attackPower = 10;
+        this.attackPower = 20;
         this.isOnScreen = true;
     }
 
-    public Spider(int healthPoints, int staminaPoints, int attackPower, boolean isOnScreen){
+    public Enemy(int healthPoints, int staminaPoints, int attackPower, boolean isOnScreen){
         super(healthPoints, staminaPoints, attackPower, isOnScreen);
         this.healthPoints = super.getHealthPoints();
         this.staminaPoints = super.getStaminaPoints();
@@ -25,7 +26,7 @@ public class Spider extends Enemy{
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public int getHealthPoints() {
@@ -40,15 +41,18 @@ public class Spider extends Enemy{
         return this.isOnScreen;
     }
 
+    public boolean getIsBlocking(){
+        return isBlocking;
+    }
+
     @Override
     public int getAttackPower() {
         return this.attackPower;
     }
 
-    public boolean getIsBlocking(){
-        return isBlocking;
+    public boolean isEvadeSuccessful() {
+        return evadeSuccessful;
     }
-
 
     public void setHealthPoints(int healthPoints) {
         this.healthPoints = healthPoints;
@@ -58,22 +62,12 @@ public class Spider extends Enemy{
         this.staminaPoints = staminaPoints;
     }
 
-    public void setEvadeSuccessful(boolean evadeSuccessful) {
-        this.evadeSuccessful = evadeSuccessful;
+    public void setIsOnScreen(boolean isOnScreen) {
+        this.isOnScreen = isOnScreen;
     }
 
     public void setBlocking(boolean blocking) {
         isBlocking = blocking;
-    }
-
-
-    public boolean isOnScreen() {
-        return isOnScreen;
-    }
-    public void die(){
-        if(this.healthPoints <= 0){
-            this.isOnScreen = false;
-        }
     }
 
     @Override
@@ -81,57 +75,51 @@ public class Spider extends Enemy{
         this.attackPower = attackPower;
     }
 
-    public void attack(Character character){
-        if(this.staminaPoints >= 10) {
-            int currentHealth = character.getHealthPoints();
-            int afterAttackHealth = currentHealth - this.attackPower;
-            this.staminaPoints -= 10;
-            character.setHealthPoints(afterAttackHealth);
-        } else {
-            System.out.println("The " + this.name + " did not have enough stamina to attack.");
-            rest();
+    public void setEvadeSuccessful(boolean evadeSuccessful) {
+        this.evadeSuccessful = evadeSuccessful;
+    }
+    public void die(){
+        if(this.healthPoints <= 0){
+            this.isOnScreen = false;
         }
     }
+
+    public void attack(Character character){
+        int currentHealth = character.getHealthPoints();
+        int afterAttackHealth = currentHealth - 20;
+        this.staminaPoints -= 10;
+        character.setHealthPoints(afterAttackHealth);
+    }
     public void block(Character character){
-        if(this.staminaPoints >= 5) {
-            double blockChance = Math.random();
+        double blockChance = Math.random();
+        if(blockChance > .3) {
+            this.isBlocking = true;
             this.staminaPoints -= 5;
-            if (blockChance > .3) {
-                this.isBlocking = true;
-            } else {
-                this.isBlocking = false;
-            }
+
         } else {
-            System.out.println("The " + this.name + " did not have enough stamina to block.");
-            rest();
+            this.isBlocking = false;
         }
     }
     public void evade(Character character){
-        if(this.staminaPoints >= 10) {
-            double evadeChance = Math.random();
-            this.staminaPoints -= 10;
-            if (evadeChance > .7) {
-                this.evadeSuccessful = true;
-            } else {
-                this.evadeSuccessful = false;
-            }
+        double evadeChance = Math.random();
+        if(evadeChance > .7){
+            this.evadeSuccessful = true;
         } else {
-            System.out.println("The " + this.name + " did not have enough stamina to evade.");
-            rest();
+            this.evadeSuccessful = false;
         }
     }
+
     public void rest() {
-        if (this.staminaPoints >= 60){
+        if (this.staminaPoints >= 50){
             System.out.println(this.name + "tried, but did not need to rest");
         } else if(this.staminaPoints <= 40) {
             System.out.println("The " + this.name + " decided to rest up and restore it's stamina.");
-            this.staminaPoints += 20;
+            this.staminaPoints += 10;
         } else {
             System.out.println("The " + this.name + " decided to rest up and restore it's stamina.");
             this.staminaPoints += 5;
         }
     }
-
     @Override
     public String toString() {
         return "DungeonGame.Character{" + "name=" + name +
@@ -141,8 +129,4 @@ public class Spider extends Enemy{
                 ", isOnScreen=" + isOnScreen +
                 '}';
     }
-
-
-
 }
-
