@@ -14,13 +14,22 @@ public class Room {
     private File goblinFile = new File("app/src/main/java/dungeongame/Goblin.txt");
     private File spiderFile = new File("app/src/main/java/dungeongame/Spider.txt");
     private File orgeFile = new File("app/src/main/java/dungeongame/Orge.txt");
-
+    private File skeletonFile = new File("app/src/main/java/dungeongame/Skeleton.txt");
 
     public Room(){
         player1 = new MainCharacter();
 
         enemyAppearance = Math.random();
-        if(enemyAppearance < .5){
+        if(enemyAppearance < .2){
+            Skeleton skeleton1 = new Skeleton();
+            enemy = skeleton1;
+            try{
+                printFile(skeletonFile);
+            } catch (FileNotFoundException e) {
+                System.out.println("***NO PIC FOUND***");
+            }
+        }
+        else if(enemyAppearance < .5){
             Goblin goblin1 = new Goblin();
             enemy = goblin1;
             try{
@@ -84,6 +93,8 @@ public class Room {
                 printFile(goblinFile);
             } else if(enemy1 instanceof Spider){
                 printFile(spiderFile);
+            } else if (enemy instanceof Skeleton) {
+                printFile(skeletonFile);
             } else {
                 printFile(orgeFile);
             }
